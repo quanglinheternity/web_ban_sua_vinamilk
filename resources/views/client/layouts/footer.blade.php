@@ -7,7 +7,7 @@
                         <div class="footer-infor">
                             <div class="footer-logo">
                                 <a href="index.html">
-                                    <img src="./assets/images/logo.png" alt="">
+                                    <img src="{{ asset('/assets/images/logo.png')}}" alt="">
                                 </a>
                             </div>
 
@@ -61,6 +61,19 @@
         </div>
     </div>
 </footer>
+
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/swiper-bundle.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/carousel.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/bootstrap-select.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/lazysize.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/count-down.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/wow.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/multiple-modal.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/assets_font/js/main.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     // Lấy element của menu
 //     codocument.addEventListener("DOMContentLoaded", function () {
@@ -75,64 +88,4 @@
 //     });
 // });
 </script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/bootstrap.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/swiper-bundle.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/carousel.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/bootstrap-select.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/lazysize.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/count-down.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/wow.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/multiple-modal.js') }}"></script>
-<script type="text/javascript" src="{{ asset('assets/assets_font/js/main.js') }}"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</body>
-<script>
-    $(document).ready(function() {
-        //Lấy tỉnh thành
-        $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
-            if (data_tinh.error == 0) {
-                $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                    $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                });
-                $("#tinh").change(function(e) {
-                    var idtinh = $(this).val();
-                    $("#ten_tinh").val($("#tinh option:selected").text()); // Đặt tên tỉnh vào input ẩn
 
-                    //Lấy quận huyện
-                    $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
-                        if (data_quan.error == 0) {
-                            $("#quan").html('<option value="0">Quận Huyện</option>');
-                            $("#phuong").html('<option value="0">Phường Xã</option>');
-                            $.each(data_quan.data, function(key_quan, val_quan) {
-                                $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
-                            });
-
-                            $("#quan").change(function(e) {
-                                var idquan = $(this).val();
-                                $("#ten_quan").val($("#quan option:selected").text()); // Đặt tên quận vào input ẩn
-
-                                //Lấy phường xã
-                                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
-                                    if (data_phuong.error == 0) {
-                                        $("#phuong").html('<option value="0">Phường Xã</option>');
-                                        $.each(data_phuong.data, function(key_phuong, val_phuong) {
-                                            $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                        });
-
-                                        $("#phuong").change(function(e) {
-                                            $("#ten_phuong").val($("#phuong option:selected").text()); // Đặt tên phường vào input ẩn
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                    });
-                });
-            }
-        });
-    });
-</script>
-
-
-</html>

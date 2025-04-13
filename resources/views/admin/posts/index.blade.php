@@ -90,4 +90,21 @@
         {{ $posts->appends(request()->query())->links('pagination::bootstrap-4') }}
     </div>
 </div>
+
+@endsection
+@section('scripts')
+<script>
+    ClassicEditor
+        .create(document.querySelector('#content'), {
+            toolbar: [
+                'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', 'imageUpload', 'insertTable', 'mediaEmbed'
+            ],
+            ckfinder: {
+                uploadUrl: '/your-upload-endpoint'  // Địa chỉ endpoint để tải hình ảnh lên, có thể cần phải cấu hình thêm backend
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>
 @endsection

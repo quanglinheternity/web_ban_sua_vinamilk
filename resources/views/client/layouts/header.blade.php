@@ -14,13 +14,17 @@
     <link rel="stylesheet" href="{{ asset('/assets/assets_font/css/swiper-bundle.min.css') }}">
     <link rel="stylesheet" href="{{ asset('/assets/assets_font/css/animate.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('/assets/assets_font/css/styles.css')}}" >
-    <link rel="stylesheet" href="{{ asset('/resources/css/clientMenu.css')}}">
+    {{-- <link rel="stylesheet" href="{{ asset('/resources/css/clientMenu.css')}}"> --}}
+
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('/assets/assets_font/images/logo/favicon.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ asset('/assets/assets_font/images/logo/favicon.png') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    {{-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet"> --}}
+
 
     <!-- Swiper CSS -->
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css.css">

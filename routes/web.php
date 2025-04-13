@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ClientController\CartController;
+use App\Http\Controllers\ClientController\CheckoutController;
 use App\Http\Controllers\ClientController\ClientContactController;
 use App\Http\Controllers\ClientController\HomeController;
 use App\Http\Controllers\ClientController\ListProductController;
@@ -20,9 +22,21 @@ Route::prefix('/',)->name('client.')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('index');
     Route::get('/ListProducts', [ListProductController::class, 'index'])->name('ListProducts');
     Route::get('/{id}/showProduct', [ListProductController::class, 'showProduct'])->name('showProduct');
+    Route::post('/review', [ListProductController::class, 'reviewsStore'])->middleware('auth')->name('reviewsStore');
     Route::get('/contact', [ClientContactController::class, 'index'])->name('contact');
     Route::post('/send-contact', [ClientContactController::class, 'sendContact'])->middleware('auth')->name('sendContact');
-
+    //giỏ hàng
+    Route::post('/addToCart', [CartController::class, 'addToCart'])->middleware('auth')->name('addToCart');
+    Route::get('/cart', [CartController::class, 'cartView'])->middleware('auth')->name('cartView');
+    Route::post('/update-cart-quantity', [CartController::class, 'updateCartQuantity'])->name('updateCartQuantity');
+    Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('removeFromCart');
+    Route::post('/clear-cart', [CartController::class, 'clearCart'])->name('clearCart');
+    //check out
+        Route::post('/checkoutOrder', [CheckoutController::class, 'index'])->middleware('auth')->name('checkout');
+        Route::get('/fromcheckout', [CheckoutController::class, 'showForm'])->middleware('auth')->name('.FromCheckout');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('auth')->name('checkoutStore');
+    Route::get('/checkout/vnpay/callback', [CheckoutController::class, 'vnpayCallback'])->name('checkout.vnpay.callback');
+    Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 });
 Route::prefix('/admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
     Route::get('/' , [ProductController::class, 'dashboard'])->name('dashboard');
@@ -47,8 +61,8 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->name('admin.')->group(fu
         Route::put('/{id}/update', [CategoryController::class,'update'])->name('update');
         Route::delete('/{id}/destroy', [CategoryController::class,'destroy'])->name('destroy');
         Route::get('/trashed', [CategoryController::class, 'trashed'])->name('trashed');
-    Route::patch('/restore/{id}', [CategoryController::class, 'restore'])->name('restore');
-    Route::delete('/force-delete/{id}', [CategoryController::class, 'forceDelete'])->name('forceDelete');
+        Route::patch('/restore/{id}', [CategoryController::class, 'restore'])->name('restore');
+        Route::delete('/force-delete/{id}', [CategoryController::class, 'forceDelete'])->name('forceDelete');
     });
     Route::prefix('/customers')->name('customers.')->group(function(){
         Route::get('/',[CustomerController::class, 'index'])->name('index');

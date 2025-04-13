@@ -18,6 +18,9 @@
     {{-- @include('client.layouts.nav') --}}
 
     @include('client.layouts.footer')
+    @yield('scripts')
+
 </body>
 
 </html>
+

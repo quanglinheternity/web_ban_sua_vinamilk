@@ -12,6 +12,7 @@
     <!-- Thêm vào thẻ <head> của trang -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/35.3.0/classic/ckeditor.js"></script>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -28,6 +29,7 @@
     </div>
 
     @include('admin.layouts.footer')
+    @yield('scripts')
 </div>
 
 <script src="{{ asset('js/script.js') }}"></script>

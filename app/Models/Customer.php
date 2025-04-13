@@ -12,12 +12,18 @@ class Customer extends Model
     //
     protected $table = 'customers';
     protected $fillable=[
-        'ten_khach_hang',
-        'email',
+
         'so_dien_thoai',
         'dia_chi',
+        'anh_dai_dien',
+        'ngay_sinh',
+        'gioi_tinh',
+        'user_id'
     ];
     public function reviews(){
         return $this->hasMany(Review::class, 'customer_id');
+    }
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

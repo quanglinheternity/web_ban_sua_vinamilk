@@ -18,10 +18,14 @@
                                 <img class="lazyload img-hover" data-src="{{ asset(Storage::url( $top5['img']) )}}" src="{{ asset(Storage::url( $top5['img']) )}}" alt="image-product">
                             </a>
                             <div class="list-product-btn">
-                                <a href=""  class="box-icon bg_white quick-add tf-btn-loading">
-                                    <span class="icon icon-bag"></span>
+                                <form action="{{ route('client.addToCart') }}" method="post" class="box-icon bg_white add-to-cart">
+                                    @csrf
+                                    <input type="hidden" name="san_pham_id" value="{{ $top5->id }}">
+                                    {{-- <input type="hidden" name="so_luong" value="1"> --}}
+                                    <button type="submit" class="icon icon-bag" style="border: none; background-color: white; outline: none;"></button>
                                     <span class="tooltip">Thêm Giỏ Hàng</span>
-                                </a>
+                                </form>
+
                                 <a href="" class="box-icon bg_white wishlist btn-icon-action">
                                     <span class="icon icon-heart"></span>
                                     <span class="tooltip">Thêm Sản Phẩm Yêu Thích</span>
@@ -58,10 +62,13 @@
                                 <img class="lazyload img-hover" data-src="{{ asset(Storage::url( $listProduct['img']) )}}" src="{{ asset(Storage::url( $listProduct['img']) )}}" alt="image-product">
                             </a>
                             <div class="list-product-btn">
-                                <a href=""  class="box-icon bg_white quick-add tf-btn-loading">
-                                    <span class="icon icon-bag"></span>
+                                <form action="{{ route('client.addToCart') }}" method="post" class="box-icon bg_white add-to-cart">
+                                    @csrf
+                                    <input type="hidden" name="san_pham_id" value="{{ $listProduct->id }}">
+                                    {{-- <input type="hidden" name="so_luong" value="1"> --}}
+                                    <button type="submit" class="icon icon-bag" style="border: none; background-color: white; outline: none;"></button>
                                     <span class="tooltip">Thêm Giỏ Hàng</span>
-                                </a>
+                                </form>
                                 <a href="" class="box-icon bg_white wishlist btn-icon-action">
                                     <span class="icon icon-heart"></span>
                                     <span class="tooltip">Thêm Sản Phẩm Yêu Thích</span>

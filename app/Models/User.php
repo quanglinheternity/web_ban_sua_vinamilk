@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     //định nghĩa phân quyền
     const ROLE_ADMIN = 'admin';
@@ -56,5 +57,12 @@ class User extends Authenticatable
     // kiểm tra người dùng có phải là role admin hay không
     public function isRoleAdmin(){
         return $this->role === self::ROLE_ADMIN;
+    }
+    //khoái ngoại đên shoppingcart
+    public function shoppingcarts(){
+        return $this->hasMany(ShoppingCart::class);
+    }
+    public function customer(){
+        return $this->hasOne(Customer::class);
     }
 }

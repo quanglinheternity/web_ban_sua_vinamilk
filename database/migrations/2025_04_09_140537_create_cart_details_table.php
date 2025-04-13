@@ -8,16 +8,16 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * khách hàng
-     * Lưu thống tin khách hàng
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('cart_details', function (Blueprint $table) {
             $table->id();
-            $table->string('so_dien_thoai', 15);
-            $table->text('dia_chi')->nullable();
+            $table->foreignId('gio_hang_id')->constrained('shopping_carts')->onDelete('cascade');
+            $table->foreignId('san_pham_id')->constrained('products')->onDelete('cascade');
+            $table->integer('so_luong');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('cart_details');
     }
 };

@@ -146,11 +146,6 @@ class ProductController extends Controller
     }
     public function destroy($id){
         $product = Product::findOrFail($id);
-
-        if($product->img && Storage::disk('public')->exists($product->img)) {
-
-            Storage::disk('public')->delete($product->img);
-        }
         $product->delete();
         return redirect()->route('admin.products.index')->with('success' ,'sản phẩm được xóa');
     }
