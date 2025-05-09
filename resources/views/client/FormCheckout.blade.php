@@ -110,9 +110,12 @@
                         <input type="hidden" id="ten_quan" name="ten_quan" value="{{ old('ten_quan') }}">
                         <input type="hidden" id="ten_phuong" name="ten_phuong" value="{{ old('ten_phuong') }}">
 
+                        <input type="text" class="form-control" id="dia_chi_cu_the" name="dia_chi_cu_the"
+                            value="{{ old('dia_chi_cu_the') }}" placeholder="Nhập địa chỉ cụ thể">
+
                         <input type="text" class="form-control" id="dia_chi_nguoi_nhan" name="dia_chi_nguoi_nhan"
-                               value="{{ old('dia_chi_nguoi_nhan', $User->customer->dia_chi ?? '') }}"
-                               placeholder="Nhập địa chỉ cụ thể (sẽ được tự động cập nhật)">
+                            value="{{ old('dia_chi_nguoi_nhan', $User->customer->dia_chi ?? '') }}"
+                            placeholder="Địa chỉ đầy đủ (sẽ được tự động cập nhật)" readonly>
                         @error('dia_chi_nguoi_nhan')
                             <p class="text-danger">{{ $message }}</p>
                         @enderror
@@ -165,14 +168,16 @@
                             <?php foreach ($chiTietGioHang as $sanpham) { ?>
                                 <li class="checkout-product-item">
                                     <figure class="img-product">
-                                        <img src="<?= $sanpham->product->img ?>" alt="product">
+                                        <img src="<?= asset(Storage::url($sanpham->product->img)) ?>" alt="product">
+
                                         <span class="quantity"><?= $sanpham->so_luong ?></span>
                                     </figure>
                                     <div class="content">
                                         <div class="info">
                                             <p class="name"><?= $sanpham->product->ten_san_pham ?></p>
+                                            <p class="">Loại :{{ $sanpham->detailProductVariants->productVariant->sizeMl->size_ml_name }} - {{ $sanpham->detailProductVariants->sizeBox->size_box_name }}</p>
                                         </div>
-                                        <span class="price"><?= number_format(   ($sanpham->product->gia_khuyen_mai ?? $sanpham->product->gia) * $sanpham['so_luong']) ?>Đ</span>
+                                        <span class="price"><?= number_format(   ($sanpham->detailProductVariants->promotional_price ?? $sanpham->detailProductVariants->price) * $sanpham['so_luong']) ?>Đ</span>
                                     </div>
                                 </li>
                             <?php } ?>
@@ -211,65 +216,108 @@
 @endsection
 @section('scripts')
 <script>
-    $(document).ready(function() {
-        //Lấy tỉnh thành
-        $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
-            if (data_tinh.error == 0) {
-                $.each(data_tinh.data, function(key_tinh, val_tinh) {
-                    $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
-                });
-                $("#tinh").change(function(e) {
-                    var idtinh = $(this).val();
-                    $("#ten_tinh").val($("#tinh option:selected").text()); // Đặt tên tỉnh vào input ẩn
+  $(document).ready(function() {
+    // Lấy tỉnh thành
+    $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function(data_tinh) {
+        if (data_tinh.error == 0) {
+            $.each(data_tinh.data, function(key_tinh, val_tinh) {
+                $("#tinh").append('<option value="' + val_tinh.id + '">' + val_tinh.full_name + '</option>');
+            });
 
-                    //Lấy quận huyện
+            // Sự kiện khi chọn tỉnh
+            $("#tinh").change(function() {
+                var idtinh = $(this).val();
+                $("#ten_tinh").val($("#tinh option:selected").text());
+                updateFullAddress();
+
+                // Reset quận và phường
+                $("#quan").html('<option value="">Quận Huyện</option>');
+                $("#phuong").html('<option value="">Phường Xã</option>');
+                $("#ten_quan").val("");
+                $("#ten_phuong").val("");
+
+                // Lấy quận huyện
+                if (idtinh) {
                     $.getJSON('https://esgoo.net/api-tinhthanh/2/' + idtinh + '.htm', function(data_quan) {
                         if (data_quan.error == 0) {
-                            $("#quan").html('<option value="0">Quận Huyện</option>');
-                            $("#phuong").html('<option value="0">Phường Xã</option>');
                             $.each(data_quan.data, function(key_quan, val_quan) {
                                 $("#quan").append('<option value="' + val_quan.id + '">' + val_quan.full_name + '</option>');
                             });
+                        }
+                    });
+                }
+            });
 
-                            $("#quan").change(function(e) {
-                                var idquan = $(this).val();
-                                $("#ten_quan").val($("#quan option:selected").text()); // Đặt tên quận vào input ẩn
+            // Sự kiện khi chọn quận
+            $("#quan").change(function() {
+                var idquan = $(this).val();
+                $("#ten_quan").val($("#quan option:selected").text());
+                updateFullAddress();
 
-                                //Lấy phường xã
-                                $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
-                                    if (data_phuong.error == 0) {
-                                        $("#phuong").html('<option value="0">Phường Xã</option>');
-                                        $.each(data_phuong.data, function(key_phuong, val_phuong) {
-                                            $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
-                                        });
+                // Reset phường
+                $("#phuong").html('<option value="">Phường Xã</option>');
+                $("#ten_phuong").val("");
 
-                                        $("#phuong").change(function(e) {
-                                            $("#ten_phuong").val($("#phuong option:selected").text()); // Đặt tên phường vào input ẩn
-                                        });
-                                    }
-                                });
+                // Lấy phường xã
+                if (idquan) {
+                    $.getJSON('https://esgoo.net/api-tinhthanh/3/' + idquan + '.htm', function(data_phuong) {
+                        if (data_phuong.error == 0) {
+                            $.each(data_phuong.data, function(key_phuong, val_phuong) {
+                                $("#phuong").append('<option value="' + val_phuong.id + '">' + val_phuong.full_name + '</option>');
                             });
                         }
                     });
-                });
-            }
-        });
-    });
-    $('form').on('submit', function () {
-    let tenTinh = $('#tinh option:selected').text();
-    let tenQuan = $('#quan option:selected').text();
-    let tenPhuong = $('#phuong option:selected').text();
-    let diaChiChiTiet = $('#dia_chi_cu_the').val().trim();
+                }
+            });
 
-    // Kiểm tra nếu chưa chọn tỉnh/quận/phường
-    if (!tenTinh || !tenQuan || !tenPhuong ||) {
-        alert('Vui lòng điền đầy đủ địa chỉ.');
-        return false; // Ngăn form submit
+            // Sự kiện khi chọn phường
+            $("#phuong").change(function() {
+                $("#ten_phuong").val($("#phuong option:selected").text());
+                updateFullAddress();
+            });
+
+            // Sự kiện khi nhập địa chỉ cụ thể
+            $("#dia_chi_cu_the").on('input', function() {
+                updateFullAddress();
+            });
+        }
+    });
+
+    // Hàm cập nhật địa chỉ đầy đủ
+    function updateFullAddress() {
+        let tenTinh = $('#ten_tinh').val();
+        let tenQuan = $('#ten_quan').val();
+        let tenPhuong = $('#ten_phuong').val();
+        let diaChiCuThe = $('#dia_chi_cu_the').val().trim();
+
+        let parts = [];
+        if (diaChiCuThe) parts.push(diaChiCuThe);
+        if (tenPhuong && tenPhuong !== "Phường Xã") parts.push(tenPhuong);
+        if (tenQuan && tenQuan !== "Quận Huyện") parts.push(tenQuan);
+        if (tenTinh && tenTinh !== "Tỉnh Thành") parts.push(tenTinh);
+
+        let fullAddress = parts.join(', ');
+        $('#dia_chi_nguoi_nhan').val(fullAddress);
     }
 
-    // Gộp địa chỉ
-    let fullAddress = `${diaChiChiTiet}, ${tenPhuong}, ${tenQuan}, ${tenTinh}`;
-    $('#dia_chi_nguoi_nhan').val(fullAddress);
+    // Xử lý submit form
+    $('form').on('submit', function(e) {
+        let tenTinh = $('#tinh option:selected').text();
+        let tenQuan = $('#quan option:selected').text();
+        let tenPhuong = $('#phuong option:selected').text();
+        let diaChiCuThe = $('#dia_chi_cu_the').val().trim();
+
+        // Kiểm tra nếu chưa chọn tỉnh/quận/phường hoặc chưa nhập địa chỉ cụ thể
+        if (tenTinh === "Tỉnh Thành" || tenQuan === "Quận Huyện" || tenPhuong === "Phường Xã" || !diaChiCuThe) {
+            alert('Vui lòng điền đầy đủ địa chỉ.');
+            e.preventDefault(); // Ngăn form submit
+            return false;
+        }
+
+        // Gộp địa chỉ một lần nữa để đảm bảo
+        let fullAddress = `${diaChiCuThe}, ${tenPhuong}, ${tenQuan}, ${tenTinh}`;
+        $('#dia_chi_nguoi_nhan').val(fullAddress);
+    });
 });
 
 

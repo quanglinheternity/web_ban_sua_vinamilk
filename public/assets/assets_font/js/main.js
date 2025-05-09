@@ -93,7 +93,7 @@
         });
       }, 100);
     }
-    
+
   };
 
   /* Scroll process
@@ -133,7 +133,7 @@
     });
   };
 
-  /* Delete file 
+  /* Delete file
   -------------------------------------------------------------------------------------*/
   var deleteFile = function (e) {
     $(".remove").on("click", function (e) {
@@ -566,7 +566,7 @@
     $(window).scroll(function (event) {
       didScroll = true;
     });
-    
+
     setInterval(function () {
       if (didScroll) {
         let st = $(this).scrollTop();
@@ -644,22 +644,22 @@
   ------------------------------------------------------------------------------------- */
   var scrollGridProduct = function(){
 
-    var headerHeight = $("#header").outerHeight(); 
-    var activeColorBtn = null; 
+    var headerHeight = $("#header").outerHeight();
+    var activeColorBtn = null;
     $(".btn-grid-color").on("click", function () {
         var color = $(this).data("color");
-        var target = $(".item-img-color[data-color='" + color + "']"); 
+        var target = $(".item-img-color[data-color='" + color + "']");
         $('html, body').animate({
-            scrollTop: target.offset().top - headerHeight 
+            scrollTop: target.offset().top - headerHeight
         }, 100);
 
         $(".btn-grid-color").removeClass("active");
         $(this).addClass("active");
-        activeColorBtn = $(this); 
+        activeColorBtn = $(this);
     });
 
     $(window).on("scroll", function () {
-        var isActiveSet = false; 
+        var isActiveSet = false;
         $(".item-img-color").each(function () {
             var targetTop = $(this).offset().top - headerHeight;
             if ($(window).scrollTop() >= targetTop && $(window).scrollTop() < (targetTop + $(this).outerHeight())) {
@@ -669,7 +669,7 @@
                     $(".btn-grid-color[data-color='" + color + "']").addClass("active");
                     // $('.value-currentColor').text(color);
                 }
-                isActiveSet = true; 
+                isActiveSet = true;
             }
         });
         if (!isActiveSet && activeColorBtn !== null) {
@@ -727,7 +727,7 @@
       });
     }); // each contactform
   };
-  
+
   /* subscribe mailchimp
   ------------------------------------------------------------------------------------- */
   var ajaxSubscribe = {
@@ -883,21 +883,21 @@
       $("html").attr("dir", "rtl");
       $("body").addClass("rtl");
       $('#toggle-rtl').text('ltr');
-      $(".tf-slideshow .tf-btn,.view-all-demo .tf-btn, .pagination-link, .pagination-item").find(".icon").removeClass("icon-arrow-right").addClass("icon-arrow-left");    
+      $(".tf-slideshow .tf-btn,.view-all-demo .tf-btn, .pagination-link, .pagination-item").find(".icon").removeClass("icon-arrow-right").addClass("icon-arrow-left");
     } else {
       $("html").attr("dir", "ltr");
       $("body").removeClass("rtl");
-      $('#toggle-rtl').text('rtl');      
-      
+      $('#toggle-rtl').text('rtl');
+
     }
     $("#toggle-rtl").on("click", function() {
       if ($("html").attr("dir") === "rtl") {
-        localStorage.setItem("dir", "ltr"); 
-        $('#toggle-rtl').text('rtl');      
+        localStorage.setItem("dir", "ltr");
+        $('#toggle-rtl').text('rtl');
 
       } else {
         localStorage.setItem("dir", "rtl");
-        $('#toggle-rtl').text('ltr');      
+        $('#toggle-rtl').text('ltr');
       }
       location.reload();
     });
@@ -929,7 +929,7 @@
         $(this).closest(".write-cancel-review-wrap").toggleClass("write-review");
       });
     }
-   
+
   };
 
 

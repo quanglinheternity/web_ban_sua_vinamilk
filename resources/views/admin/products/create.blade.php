@@ -84,7 +84,8 @@
     </div>
 
         <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
-        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Quay lại</a>
+        <a href="javascript:void(0)" onclick="history.back()" class="btn btn-secondary">Quay lại</a>
+
     </form>
 </div>
 @endsection

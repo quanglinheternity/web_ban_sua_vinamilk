@@ -117,12 +117,12 @@
                         <td>
                             <a href="{{ route('admin.products.show', $product->id) }}" class="btn btn-success btn-sm d-inline-block">Xem</a>
                             <a href="{{ route('admin.products.edit', $product->id)}}" class="btn btn-primary btn-sm d-inline-block">Sửa</a>
+                            <a href="{{ route('admin.products.variants', $product->id) }}" class="btn btn-warning btn-sm d-inline-block">Biến thể</a>
                             <form action="{{ route('admin.products.destroy', $product->id)}}"class="d-inline-block" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');"
                                 >
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">XÓA</button>
-
                             </form>
                         </td>
                     </tr>

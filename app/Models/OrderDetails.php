@@ -12,16 +12,26 @@ class OrderDetails extends Model
     use HasFactory, SoftDeletes;
     public $fillable = [
         'don_hang_id',
-        'san_pham_id',
+        'san_pham_bien_the_id',
+        'size_ml_id',
+        'size_box_id',
         'so_luong',
         'tong_tien',
     ];
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::class, 'don_hang_id');
     }
-    public function product()
+    public function detailProductVariants()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(detailProductVariants::class);
+    }
+    public function sizeMl()
+    {
+        return $this->belongsTo(sizeMl::class);
+    }
+    public function sizeBox()
+    {
+        return $this->belongsTo(sizeBox::class);
     }
 }

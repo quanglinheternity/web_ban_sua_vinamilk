@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ShoppingCart extends Model
 {
     /** @use HasFactory<\Database\Factories\ShoppingCartFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $fillable = [
         'tai_khoan_id',

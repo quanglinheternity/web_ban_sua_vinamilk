@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('don_hang_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('san_pham_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('san_pham_bien_the_id')->constrained('detail_product_variants')->onDelete('cascade');
+            $table->foreignId('size_ml_id')->constrained('size_mls')->onDelete('cascade');
+            $table->foreignId('size_box_id')->constrained('size_boxes')->onDelete('cascade');
             $table->integer('so_luong');
             $table->decimal('tong_tien', 10, 2);
             $table->timestamps();
-            $table->softDeletes();
 
         });
     }

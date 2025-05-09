@@ -15,6 +15,25 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
+@if (session()->has('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+@if (session()->has('error'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if (session()->has('warning'))
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ session('warning') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 
 
 <!-- page-cart -->
@@ -22,14 +41,17 @@
     <div class="container">
         <div class="tf-page-cart-wrap">
             <div class="tf-page-cart-item">
-                <div id="success-message" style="display: none;">
+                <div id="success-message" style="display: none;" class="alert alert-success alert-dismissible fade show">
                     Sản phẩm đã được xóa khỏi giỏ hàng thành công.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <table class="tf-table-page-cart">
                     <thead>
                         <tr>
                             <th class="pro-thumbnail">Ảnh sản phẩm</th>
                             <th class="pro-title">Tên sản phẩm</th>
+                            <th class="pro-title">Loại ml</th>
+                            <th class="pro-title">Loại hộp</th>
                             <th class="pro-price">Giá tiền</th>
                             <th class="pro-quantity">Số lượng</th>
                             <th class="pro-subtotal">Tổng tiền</th>
@@ -42,26 +64,35 @@
                         @endphp
                         @foreach ($chiTietGioHang as $sanPham)
                             @php
-                                $giaSanPham = $sanPham->product->gia_khuyen_mai ?? $sanPham->product->gia;
+                                $giaSanPham = $sanPham->detailProductVariants->promotional_price ?? $sanPham->detailProductVariants->price;
                                 $tongTienSanPham = $giaSanPham * $sanPham->so_luong;
                                 $tongGioHang += $tongTienSanPham;
+                                // dd($sanPham->detailProductVariants->id)
                             @endphp
-                            <tr data-id="{{ $sanPham->product->id }}">
+                            <tr data-id="{{ $sanPham->id }}" data-san_pham_bien_the_id="{{ $sanPham->detailProductVariants->id }}" data-so_luong="{{ $sanPham->so_luong }}">
                                 <td class="pro-thumbnail">
                                     <a href="{{ route('client.showProduct', $sanPham->product->id) }}" class="img-box">
                                         <img src="{{ asset(Storage::url($sanPham->product->img)) }}" alt="Ảnh sản phẩm" width="150">
                                     </a>
                                 </td>
                                 <td class="pro-title">{{ $sanPham->product->ten_san_pham }}</td>
-                                <td class="pro-price">{{ number_format($sanPham->product->gia_khuyen_mai ?? $sanPham->product->gia) }} VND</td>
+                                @if($sanPham->detailProductVariants)
+                                <td class="pro-title">{{ $sanPham->detailProductVariants->productVariant->sizeMl->size_ml_name ?? 'Không xác định' }}</td>
+                                <td class="pro-title">{{ $sanPham->detailProductVariants->sizeBox->size_box_name ?? 'Không xác định' }}</td>
+                                <td class="pro-price">{{ number_format($sanPham->detailProductVariants->promotional_price ?? $sanPham->detailProductVariants->price) }} VND</td>
+                                @else
+                                <td class="pro-title">Không xác định</td>
+                                <td class="pro-title">Không xác định</td>
+                                <td class="pro-price">{{ number_format($sanPham->detailProductVariants->promotional_price ?? $sanPham->detailProductVariants->price) }} VND</td>
+                                @endif
                                 <td class="pro-quantity">
                                     <div class="wg-quantity small ">
                                         <button class="btn-quantity btn-decrease"style="border: none">-</button>
-                                        <input type="text" class="quantity-product" value="{{ $sanPham->so_luong }}" data-dongia="{{ $sanPham->product->gia_khuyen_mai ?? $sanPham->product->gia }}" data-sanPhamId="{{$sanPham->product->id}}">
+                                        <input type="text" class="quantity-product" value="{{ $sanPham->so_luong }}" data-dongia="{{ $sanPham->detailProductVariants->promotional_price ?? $sanPham->detailProductVariants->price }}" data-Id="{{$sanPham->id}}"  >
                                         <button class="btn-quantity btn-increase" style="border: none">+</button>
                                     </div>
                                 </td>
-                                <td class="pro-subtotal">{{ number_format(($sanPham->product->gia_khuyen_mai ?? $sanPham->product->gia) * $sanPham->so_luong) }} VND</td>
+                                <td class="pro-subtotal">{{ number_format(($sanPham->detailProductVariants->promotional_price ?? $sanPham->detailProductVariants->price) * $sanPham->so_luong) }} VND</td>
                                 <td class="pro-remove">
                                     <button class="btn-remove" style="border: none"><i class="fa-regular fa-trash-can"></i></button>
                                 </td>
@@ -115,6 +146,12 @@
                 e.preventDefault();
                 if(confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng không?')){
                     var btnProductId = $(this).closest('tr').data('id');
+                    console.log(btnProductId);
+                    var btnDetailProductVariantId = $(this).closest('tr').data('san_pham_bien_the_id');
+                    var btnSoLuong = $(this).closest('tr').data('so_luong');
+                    console.log(btnDetailProductVariantId);
+                    console.log(btnSoLuong);
+
                     // Thực hiện hành động xóa sản phẩm ở đây
                     // console.log('Xóa sản phẩm với ID:', btnProductId);
                     var row=$(this).closest('tr');
@@ -123,7 +160,9 @@
                         method: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
-                            san_pham_id: btnProductId
+                            san_pham_id: btnProductId,
+                            san_pham_bien_the_id: btnDetailProductVariantId,
+                            so_luong: btnSoLuong
                         },
                         success: function(response) {
                             row.remove();
@@ -144,6 +183,7 @@
                     });
                }
             });
+
             //sửa lý tăng giản
             $('.btn-quantity').click(function(e) {
                 e.preventDefault();
@@ -152,15 +192,15 @@
                 var oldValue = parseFloat(input.val());
                 // console.log(input);
                 if(button.hasClass('btn-increase')) {
-                    newValue = oldValue + 1;
+                    newValue = oldValue ;
                     // console.log(newValue);
                 }else if(button.hasClass('btn-decrease') ) {
-                    newValue = oldValue > 1 ? oldValue - 1 : 1;
+                    newValue = oldValue > 1 ? oldValue  : 1;
                     // console.log(newValue);
                 }
                 //lấy thông tin  cần thiết để gửi ajax
-                var sanPhamId = input.data('sanphamid');
-                // console.log(sanPhamId);
+                var Id = input.data('id');
+                // console.log(Id);
                 var donGia= input.data('dongia');
                 // console.log(donGia);
 
@@ -170,7 +210,7 @@
                     method:'POST',
                         data: {
                             _token: '{{ csrf_token() }}',
-                            san_pham_id: sanPhamId,
+                            Id: Id,
                             so_luong: newValue
                         },
                         success: function(response) {
@@ -196,7 +236,6 @@
             })
             $('.checkout-btn').click(function () {
                 const total = $(this).data('total');
-                // console.log(total);
 
                 const form = $('<form>', {
                     action: "{{ route('client.checkout') }}",
@@ -212,7 +251,7 @@
                 }));
 
                 $('body').append(form);
-                form.submit(); // Gửi form thật, chuyển hướng thật
+                form.submit();
             });
 
                 // Hàm tính toán và cập nhật tổng tiền của giỏ hàng

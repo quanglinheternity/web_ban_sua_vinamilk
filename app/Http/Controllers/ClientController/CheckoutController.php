@@ -22,7 +22,7 @@ class CheckoutController extends Controller
         //lấy thông tin dữ liệu giỏ hàng
         // return view('client.For', compact('chiTietGioHang', 'tongTien','User'));
         session(['tongTien' => $tongTien ?? 0]);
-        return redirect()->route('client.FormCheckout');
+        return redirect()->route('client.checkout.showForm');
     }
     public function showForm(Request $request)
     {
@@ -38,7 +38,7 @@ class CheckoutController extends Controller
         $tongTien = session()->get('tongTien');
 
         $chiTietGioHang = CartDetails::where('gio_hang_id', $gioHang->id)
-        ->with('product')->get();
+        ->with('product','detailProductVariants.sizeBox','detailProductVariants.productVariant.sizeMl')->get();
         // dd($chiTietGioHang->product);
         return view('client.FormCheckout', [
             'chiTietGioHang' => $chiTietGioHang,
@@ -94,7 +94,26 @@ class CheckoutController extends Controller
         ]);
         //xóa gio hàng
         $gioHang= ShoppingCart::where('tai_khoan_id', auth()->id())->first();
+        $chi_tiet_gio_hang=CartDetails::where('gio_hang_id', $gioHang->id)->with('product','detailProductVariants.sizeBox','detailProductVariants.productVariant.sizeMl')->get();
+        // dd($chi_tiet_gio_hang);
+        foreach ($chi_tiet_gio_hang as $item) {
+            // Tạo chi tiết đơn hàng
+            $tong_tien = $item->so_luong * ($item->detailProductVariants->promotional_price ?? $item->detailProductVariants->price);
+            // dd($item->detailProductVariants->size_box_id);
+            $order->orderDetails()->create([
+                'don_hang_id' => $item->san_pham_id,
+                'san_pham_bien_the_id' => $item->san_pham_bien_the_id,
+                'so_luong' => $item->so_luong,
+                'tong_tien' => $tong_tien,
+                'size_ml_id' => $item->detailProductVariants->productVariant->size_ml_id,
+                'size_box_id' => $item->detailProductVariants->size_box_id,
+            ]);
+
+        }
+        // dd('done');
+        //xóa chia tiết giỏ hàng
         CartDetails::where('gio_hang_id', $gioHang->id)->delete();
+        //xóa giỏ hàng
         ShoppingCart::where('tai_khoan_id', auth()->id())->delete();
         // Xử lý theo phương thức thanh toán
         if ($validated['phuong_thuc_thanh_toan'] === '1') {

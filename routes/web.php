@@ -13,6 +13,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\productVariantController;
 use App\Http\Controllers\ReviewController;
 use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
@@ -32,8 +33,8 @@ Route::prefix('/',)->name('client.')->group(function () {
     Route::post('/remove-from-cart', [CartController::class, 'removeFromCart'])->name('removeFromCart');
     Route::post('/clear-cart', [CartController::class, 'clearCart'])->name('clearCart');
     //check out
-        Route::post('/checkoutOrder', [CheckoutController::class, 'index'])->middleware('auth')->name('checkout');
-        Route::get('/fromcheckout', [CheckoutController::class, 'showForm'])->middleware('auth')->name('.FromCheckout');
+    Route::post('/checkoutOrder', [CheckoutController::class, 'index'])->middleware('auth')->name('checkout');
+    Route::get('/fromcheckout', [CheckoutController::class, 'showForm'])->middleware('auth')->name('checkout.showForm');
     Route::post('/checkout', [CheckoutController::class, 'store'])->middleware('auth')->name('checkoutStore');
     Route::get('/checkout/vnpay/callback', [CheckoutController::class, 'vnpayCallback'])->name('checkout.vnpay.callback');
     Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
@@ -52,6 +53,12 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->name('admin.')->group(fu
         Route::get('/trashed', [ProductController::class, 'trashed'])->name('trashed');
         Route::patch('/restore/{id}', [ProductController::class, 'restore'])->name('restore');
         Route::delete('/force-delete/{id}', [ProductController::class, 'forceDelete'])->name('forceDelete');
+        Route::get('/variants/{id}', [productVariantController::class, 'index'])->name('variants');
+        Route::get('/variantsCreate/{id}', [productVariantController::class, 'create'])->name('variants.create');
+        Route::post('/variantsStore/{id}', [productVariantController::class, 'store'])->name('variants.store');
+        Route::get('{product}/variants/{variant}/edit', [productVariantController::class, 'edit'])->name('variants.edit');
+        Route::post('{product}/vartiants/{variant}/update', [productVariantController::class, 'update'])->name('variants.update');
+        Route::delete('/variants/{id}/destroy', [productVariantController::class, 'destroy'])->name('variants.destroy');
     });
     Route::prefix('/categories')->name('categories.')->group(function(){
         Route::get('/',[CategoryController::class, 'index'])->name('index');

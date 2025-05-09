@@ -18,13 +18,10 @@
                                 <img class="lazyload img-hover" data-src="{{ asset(Storage::url( $top5['img']) )}}" src="{{ asset(Storage::url( $top5['img']) )}}" alt="image-product">
                             </a>
                             <div class="list-product-btn">
-                                <form action="{{ route('client.addToCart') }}" method="post" class="box-icon bg_white add-to-cart">
-                                    @csrf
-                                    <input type="hidden" name="san_pham_id" value="{{ $top5->id }}">
-                                    {{-- <input type="hidden" name="so_luong" value="1"> --}}
-                                    <button type="submit" class="icon icon-bag" style="border: none; background-color: white; outline: none;"></button>
+                                 <a href="{{ route('client.showProduct', $top5['id'])}}"  class="box-icon bg_white quick-add tf-btn-loading">
+                                    <span class="icon icon-bag"></span>
                                     <span class="tooltip">Thêm Giỏ Hàng</span>
-                                </form>
+                                </a>
 
                                 <a href="" class="box-icon bg_white wishlist btn-icon-action">
                                     <span class="icon icon-heart"></span>
@@ -62,13 +59,10 @@
                                 <img class="lazyload img-hover" data-src="{{ asset(Storage::url( $listProduct['img']) )}}" src="{{ asset(Storage::url( $listProduct['img']) )}}" alt="image-product">
                             </a>
                             <div class="list-product-btn">
-                                <form action="{{ route('client.addToCart') }}" method="post" class="box-icon bg_white add-to-cart">
-                                    @csrf
-                                    <input type="hidden" name="san_pham_id" value="{{ $listProduct->id }}">
-                                    {{-- <input type="hidden" name="so_luong" value="1"> --}}
-                                    <button type="submit" class="icon icon-bag" style="border: none; background-color: white; outline: none;"></button>
+                                <a href="{{ route('client.showProduct', $top5['id'])}}"  class="box-icon bg_white quick-add tf-btn-loading">
+                                    <span class="icon icon-bag"></span>
                                     <span class="tooltip">Thêm Giỏ Hàng</span>
-                                </form>
+                                </a>
                                 <a href="" class="box-icon bg_white wishlist btn-icon-action">
                                     <span class="icon icon-heart"></span>
                                     <span class="tooltip">Thêm Sản Phẩm Yêu Thích</span>
@@ -185,4 +179,13 @@
             </div>
         </div>
     </section>
+@endsection
+@section('scripts')
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+  intent="WELCOME"
+  chat-title="admin"
+  agent-id="e1d4d555-1cf1-4517-953e-3702c2252ce5"
+  language-code="en"
+></df-messenger>
 @endsection
