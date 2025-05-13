@@ -57,7 +57,7 @@
                 <td>{{ $order->paymentMethod->ten_phuong_thuc }}</td>
                 <td>
                     <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-info">Xem</a>
-                    <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-warning">Sửa</a>
+                    {{-- <a href="{{ route('admin.orders.edit', $order->id) }}" class="btn btn-warning">Sửa</a> --}}
                     <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')

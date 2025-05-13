@@ -10,13 +10,13 @@
         <div class="row">
             <div class="mb-3 col-md-6">
                 <label class="form-label">Tên khách hàng</label>
-                <input type="text" name="ten_khach_hang" class="form-control @error('ten_khach_hang') is-invalid @enderror" value="{{ old('ten_khach_hang', $customer->ten_khach_hang) }}">
+                <input type="text" name="ten_khach_hang" class="form-control @error('ten_khach_hang') is-invalid @enderror" value="{{ old('ten_khach_hang', $customer->user->name) }}">
                 @error('ten_khach_hang') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
             <div class="mb-3 col-md-6">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $customer->email) }}">
+                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', $customer->user->email ) }}">
                 @error('email') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
@@ -31,6 +31,7 @@
                 <input type="text" name="dia_chi" class="form-control @error('dia_chi') is-invalid @enderror" value="{{ old('dia_chi', $customer->dia_chi) }}">
                 @error('dia_chi') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
+
         </div>
 
         <button type="submit" class="btn btn-primary">Cập nhật khách hàng</button>

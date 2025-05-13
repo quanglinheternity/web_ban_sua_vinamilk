@@ -23,8 +23,8 @@
                 @foreach ($customers as $customer)
                 <tr>
                     <td>{{ $customer->id }}</td>
-                    <td>{{ $customer->ten_khach_hang }}</td>
-                    <td>{{ $customer->email }}</td>
+                    <td>{{ $customer->user->name }}</td>
+                    <td>{{ $customer->user->email }}</td>
                     <td>{{ $customer->so_dien_thoai }}</td>
                     <td>{{ $customer->dia_chi }}</td>
 

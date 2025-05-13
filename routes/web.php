@@ -82,6 +82,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->name('admin.')->group(fu
         Route::get('/trashed', [CustomerController::class, 'trashed'])->name('trashed');
         Route::patch('/restore/{id}', [CustomerController::class, 'restore'])->name('restore');
         Route::delete('/force-delete/{id}', [CustomerController::class, 'forceDelete'])->name('forceDelete');
+        Route::put('/{id}/updateMyPassword', [CustomerController::class, 'updateMyPassword'])->name('update.myPassword');
     });
     Route::prefix('/banners')->name('banners.')->group(function(){
         Route::get('/',[BannerController::class, 'index'])->name('index');

@@ -60,13 +60,18 @@
                     @foreach ($customers as $customer)
                     <tr>
                         <td>{{ $customer->id }}</td>
-                        <td>{{ $customer->ten_khach_hang }}</td>
-                        <td>{{ $customer->email }}</td>
+                        <td>{{ $customer->user->name }}</td>
+                        <td>{{ $customer->user->email }}</td>
                         <td>{{ $customer->so_dien_thoai }}</td>
                         <td>{{ $customer->dia_chi }}</td>
 
                         <td>
                             <a href="{{ route('admin.customers.edit', $customer->id) }}" class="btn btn-primary btn-sm d-inline-block">Sửa</a>
+                            <form action="{{ route('admin.customers.update.myPassword', $customer->id) }}" class="d-inline-block" method="POST" onsubmit="return confirm('Bạn có chắc muốn cập nhật mật khuẩn khách hàng này?');">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn btn-warning btn-sm">Cập nhập</button>
+                            </form>
                             <form action="{{ route('admin.customers.destroy', $customer->id) }}" class="d-inline-block" method="POST" onsubmit="return confirm('Bạn có chắc muốn xóa khách hàng này?');">
                                 @csrf
                                 @method('DELETE')
