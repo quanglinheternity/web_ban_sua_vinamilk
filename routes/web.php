@@ -11,6 +11,7 @@ use App\Http\Controllers\ClientController\ListProductController;
 use App\Http\Controllers\ContactController;
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\productVariantController;
@@ -127,6 +128,14 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->name('admin.')->group(fu
         Route::patch('/restore/{id}', [ReviewController::class, 'restore'])->name('restore');
         Route::delete('/force-delete/{id}', [ReviewController::class, 'forceDelete'])->name('forceDelete');
 
+    });
+    Route::prefix('/orders')->name('orders.')->group(function () {
+        Route::resource('/', OrderController::class);
+        Route::get('/{id}/show', [OrderController::class, 'show'])->name('show');
+        Route::put('/{id}/updateStatus', [OrderController::class, 'updateStatus'])->name('update.status');
+        Route::delete('/destroy/{id}', [OrderController::class, 'destroy'])->name('destroy');
+        Route::get('{id}/edit', [OrderController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}', [OrderController::class, 'update'])->name('update');
     });
 
 });

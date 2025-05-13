@@ -24,7 +24,7 @@ class OrderDetails extends Model
     }
     public function detailProductVariants()
     {
-        return $this->belongsTo(detailProductVariants::class);
+        return $this->belongsTo(detailProductVariants::class, 'san_pham_bien_the_id');
     }
     public function sizeMl()
     {

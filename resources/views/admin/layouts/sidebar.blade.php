@@ -14,15 +14,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.categories.index') }}" class="nav-link">
+                        <i class="bi bi-tags"></i> <!-- Icon thẻ danh mục -->
+                        <p>Danh mục</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ url('/admin/products') }}" class="nav-link">
                         <i class="bi bi-box"></i> <!-- Icon hộp sản phẩm -->
                         <p>Sản phẩm</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('admin.categories.index') }}" class="nav-link">
-                        <i class="bi bi-tags"></i> <!-- Icon thẻ danh mục -->
-                        <p>Danh mục</p>
+                    <a href="{{ url('/admin/orders') }}" class="nav-link">
+                        <i class="bi bi-cart"></i> <!-- Icon người dùng -->
+                        <p>Đơn hàng</p>
                     </a>
                 </li>
                 <li class="nav-item">

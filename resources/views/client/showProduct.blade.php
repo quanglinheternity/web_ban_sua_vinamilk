@@ -597,54 +597,51 @@ input[type="radio"]:checked + label .checkbox-custom::after {
 
 
 $(document).ready(function() {
-    // Khi click tăng số lượng
-    $('.btn-increase').click(function() {
-        const input = $(this).siblings('.quantity-product');
-        const max = parseInt(input.attr('data-max')); // Dùng jQuery .data()
-        console.log(max,'kt');
-        let currentVal = parseInt(input.val()) || 1;
-        console.log(currentVal, 'kkk');
+    const $quantityInput = $('.quantity-product');
+    const $hiddenInput = $('.quantity-hidden');
 
-        if (currentVal <= max) {
-            input.val(currentVal ).trigger('change');
-        }else{
-            input.val(max).trigger('change'); // Gán lại giá trị tối đa
-            alert('Không thể vượt quá số lượng trong kho!');
+    // Xử lý nút tăng/giảm số lượng
+    $('.btn-quantity').click(function(e) {
+        e.preventDefault();
+        const isIncrease = $(this).hasClass('btn-increase');
+        const max = parseInt($quantityInput.attr('data-max'));
+        let currentVal = parseInt($quantityInput.val()) || 1;
+
+        // Tăng/giảm số lượng
+        if (isIncrease) {
+            currentVal = currentVal < max ? currentVal  : max;
+            if (currentVal === max) {
+                alert('Đã đạt số lượng tối đa trong kho!');
+            }
+        } else {
+            currentVal = currentVal > 1 ? currentVal  : 1;
         }
 
-    });
-    // Khi click giảm số lượng
-    $('.btn-decrease').click(function () {
-        let $input = $(this).siblings('.quantity-product');
-        let currentVal = parseInt($input.val()) || 1;
-
-        if (currentVal > 1) {
-            $input.val(currentVal ).trigger('change');
-        }
+        // Cập nhật giá trị
+        $quantityInput.val(currentVal).trigger('change');
     });
 
-    // Khi thay đổi số lượng thì cập nhật vào input ẩn trong form
-    $('.quantity-product').on('change keyup', function () {
-        let $input = $(this);
-        let max = parseInt($input.attr('max'));
-        let val = parseInt($input.val()) || 1;
+    // Xử lý khi thay đổi giá trị input số lượng
+    $quantityInput.on('change keyup', function() {
+        const max = parseInt($(this).attr('data-max'));
+        let val = parseInt($(this).val()) || 1;
 
+        // Kiểm tra giới hạn
         if (val > max) {
             alert('Không thể vượt quá số lượng trong kho!');
-            $input.val(max);
             val = max;
         } else if (val < 1) {
-            $input.val(1);
             val = 1;
         }
 
-        $('.quantity-hidden').val(val);
+        // Cập nhật cả 2 input
+        $(this).val(val);
+        $hiddenInput.val(val);
     });
 
-    // Đồng bộ số lượng khi submit form (tránh trường hợp user nhập tay mà chưa nhấn enter)
+    // Đồng bộ số lượng khi thêm vào giỏ
     $('.btn-add-to-cart').click(function() {
-        let quantity = parseInt($('.quantity-product').val()) || 1;
-        $('.quantity-hidden').val(quantity);
+        $hiddenInput.val($quantityInput.val());
     });
 });
 
