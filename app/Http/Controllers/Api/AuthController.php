@@ -14,15 +14,16 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Sai tài khoản hoặc mật khẩu'], 401);
+            return response()->json(['message' => 'Sai tài khoản hoặc mật khẩu nhập'], 401);
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
             'user' => $user,
-            'token' => $token
-        ]);
+            'token' => $token,
+            'status' => 200,
+        ], 200);
     }
 
     public function logout(Request $request)

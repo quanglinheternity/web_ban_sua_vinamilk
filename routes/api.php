@@ -14,8 +14,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 Route::post('products/restore', [ApiProductController::class, 'restore']);
 
+Route::apiResource('products', ApiProductController::class);
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::apiResource('products', ApiProductController::class);
 });
 

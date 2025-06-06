@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('/assets/assets_font/css/styles.css')}}" >
     {{-- <link rel="stylesheet" href="{{ asset('/resources/css/clientMenu.css')}}"> --}}
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
 
     <!-- Favicon and Touch Icons  -->
     <link rel="shortcut icon" href="{{ asset('/assets/assets_font/images/logo/favicon.png') }}">
